@@ -17,7 +17,7 @@ public class grab : MonoBehaviour
     {
 
         inputActionReference.action.started += ToggleObject;
-        inputActionReference.action.canceled+= ReleaseObject;
+        inputActionReference.action.canceled += ReleaseObject;
     }
 
     private void OnDestroy()
@@ -27,22 +27,42 @@ public class grab : MonoBehaviour
 
     private void ToggleObject(InputAction.CallbackContext context)
     {
-        Debug.Log("I´n ToggleObject");
+        
+        Debug.Log("In ToggleObject");
         if (obj)
         {
             obj.GetComponent<MeshRenderer>().material = mat3;
+            obj.GetComponent<Rigidbody>().isKinematic = false;
+            obj.transform.parent = this.gameObject.transform;
+
         }
     }
 
     private void ReleaseObject(InputAction.CallbackContext context)
     {
-        Debug.Log("I´n releaseObject");
+        Debug.Log("In releaseObject");
         if (obj)
         {
             obj.GetComponent<MeshRenderer>().material = mat1;
+            obj.GetComponent<Rigidbody>().isKinematic = true;
+            obj.transform.parent = null;
         }
     }
 
+/*
+    void OnCollisionEnter(Collision collision)
+    {
+        collision.gameObject.GetComponent<MeshRenderer>().material = mat1;
+        obj = collision.gameObject;
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        collision.gameObject.GetComponent<MeshRenderer>().material = mat2;
+        obj = null;
+    }
+*/
+    
     private void OnTriggerEnter(Collider other)
     {
         other.gameObject.GetComponent<MeshRenderer>().material = mat1;
